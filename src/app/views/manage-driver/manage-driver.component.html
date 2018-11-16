@@ -1,0 +1,253 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Manage Driver</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Manage Driver</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+
+<div  class="form-group" style="display:inline-flex;align-items: flex-start">
+  <label>Search By ID</label>
+  <input type="text"  name="searchId" [(ngModel)]="searchId" id="searchId" class="form-control"  />
+  <button  type="button" class="btn btn-info" (click)="findDriverById()"><i class="fa fa-search" style="float: right"></i></button>
+</div>
+
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-12">
+        <table id="tblSuppliers" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Licence Name</th>
+            <th>Full Name</th>
+            <th>Prefered Name</th>
+            <th>Address</th>
+            <th>Tel No 1</th>
+            <th>Tel no 2</th>
+            <th>Rating</th>
+            <th>Active Date</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+
+
+
+
+          <tr *ngFor="let driver of drivers | paginate: { itemsPerPage: 10, currentPage: p };let i=index"
+              (click)="selectDrivers(driver)" [class.selected]="drivers==selectedDriver">
+            <td>{{i+1}}</td>
+            <td>{{driver.driverID}}</td>
+            <td>{{driver.licenceNumber}}</td>
+            <td>{{driver.fullName}}</td>
+            <td>{{driver.address}}</td>
+            <td>{{driver.telNo1}}</td>
+            <td>{{driver.telNo2}}</td>
+            <td>{{driver.rating}}</td>
+            <td>{{driver.activeDate}}</td>
+            <td>{{driver.status}}</td>
+          </tr>
+
+
+
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="11">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+        <div class="btn-div">
+          <button (click)="openModal(adddriver)" class="fa fa-plus" class="btn btn-primary" >Add</button>
+          <button (click)="editDrivers()" class="fa fa-edit " class="btn btn-warning">Edit</button>
+          <button (click)="deleteDrivers()" class="fa fa-trash " class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+
+<!--ng modal start remove item-->
+<ng-template #adddriver let-modal>
+  <div class="addcustomer-form">
+    <div class="modal-header">
+
+      <h4 class="modal-title text-center" >Add Driver</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    <form [formGroup]="driverForm">
+
+      <div class="form-group">
+        <label>Driver Id</label>
+        <input type="text" formControlName="driverID" name="driverID" [(ngModel)]="selectedDriver.driverID" id="driverID" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.driverID.errors }" />
+        <div *ngIf="submitted && f.driverID.errors" class="invalid-feedback">
+          <div *ngIf="f.driverID.errors.required">Id is required</div>
+
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Licence No</label>
+        <input type="text" formControlName="licenceNumber" class="form-control"  name="licenceNumber"
+               [(ngModel)]="selectedDriver.licenceNumber" id="lastName"  [ngClass]="{ 'is-invalid': submitted && f.licenceNumber.errors }" />
+        <div *ngIf="submitted && f.licenceNumber.errors" class="invalid-feedback">
+          <div *ngIf="f.licenceNumber.errors.required">Licence  is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Prefered Name</label>
+        <input type="text" formControlName="preferredName" name="preferredName"
+               [(ngModel)]="selectedDriver.preferredName" id="preferredName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.preferredName.errors }" />
+        <div *ngIf="submitted && f.preferredName.errors" class="invalid-feedback">
+          <div *ngIf="f.preferredName.errors.required">Prefered Name required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text" formControlName="address" name="address"
+               [(ngModel)]="selectedDriver.address" id="mobile" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.address.errors }" />
+        <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+          <div *ngIf="f.address.errors.required">Address is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Tel no 1</label>
+        <input type="text" formControlName="telNo1" name="telNo1"
+               [(ngModel)]="selectedDriver.telNo1" id="telNo1" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.telNo1.errors }" />
+        <div *ngIf="submitted && f.telNo1.errors" class="invalid-feedback">
+          <div *ngIf="f.telNo1.errors.required">Tel no 1 is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Tel no 2</label>
+        <input type="text" formControlName="telNo2" name="telNo2"
+               [(ngModel)]="selectedDriver.telNo2" id="telNo2" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.telNo2.errors }" />
+        <div *ngIf="submitted && f.telNo2.errors" class="invalid-feedback">
+          <div *ngIf="f.telNo2.errors.required">Tel no 2 is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Rating</label>
+        <input type="text" formControlName="rating" name="rating"
+               [(ngModel)]="selectedDriver.rating" id="rating" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.rating.errors }" />
+        <div *ngIf="submitted && f.rating.errors" class="invalid-feedback">
+          <div *ngIf="f.rating.errors.required">Rating is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Active Date</label>
+        <input type="text" formControlName="activeDate" name="activeDate"
+               [(ngModel)]="selectedDriver.activeDate" id="activeDate" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.activeDate.errors }" />
+        <div *ngIf="submitted && f.activeDate.errors" class="invalid-feedback">
+          <div *ngIf="f.activeDate.errors.required">Active Date is Required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <input type="text" formControlName="status" name="status"
+               [(ngModel)]="selectedDriver.status" id="status" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.status.errors }" />
+        <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+          <div *ngIf="f.status.errors.required">Status is required</div>
+        </div>
+      </div>
+
+
+
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Close</button>
+      <button type="button" class="btn btn-info" (click)="saveDrivers()">Modify</button>
+    </div>
+  </div>
+</ng-template>
+
+<!--ng modal end-->
+
+<!--unsucces modal-->
+<ng-template #unsuccess let-modal>
+  <div class="modal-header" style="background-color: darkorange">
+    <h4 class="modal-title" >Status </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <p>
+      <span class="text-danger">Not Saved !!!</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary btn-block btn-flat" (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--unsuccess message- end-->
+
+<!--succes modal-->
+<ng-template #success let-modal>
+  <div class="modal-header" style="color:darkseagreen">
+    <h4 class="modal-title" >Status </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!--<p><strong>Are you sure you want to delete <span class="text-primary">{{productDesc}}</span> Product ?</strong></p>-->
+    <p>
+      <span class="text-bold">Successfully saved..</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary btn-block btn-flat" (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--success message- end-->
+
+<!--alert modal-->
+<ng-template #alert let-modal>
+  <div class="modal-header" >
+    <h4 class="modal-title" >Status </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <p>
+      <span class="text-danger">Please select the Driver !!</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary btn-block btn-flat" (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--alert message- end-->

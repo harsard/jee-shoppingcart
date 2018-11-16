@@ -1,0 +1,215 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Manage vehicle</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Manage vehicle</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+<!--search -->
+<div  class="form-group" style="display:inline-flex;align-items: flex-start">
+  <label>Search By ID</label>
+  <input type="text" name="searchId" [(ngModel)]="searchId" id="searchId" class="form-control"  />
+  <button  type="button" class="btn btn-info" (click)="findItemById()"><i class="fa fa-search" style="float: right"></i></button>
+</div>
+
+
+<section class="content" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-12">
+        <table id="tblItem" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+
+            <th>#</th>
+            <th>vehicle Id</th>
+            <th>Colour</th>
+            <th>Seat Count</th>
+            <th>Status</th>
+            <th>Available</th>
+            <th>Reg No</th>
+            <th>District</th>
+            <th>City</th>
+
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr *ngFor="let vehicle of vehicles | paginate: { itemsPerPage: 10, currentPage: p };let i=index"
+              (click)="selectVehicle(vehicle)" [class.selected]="vehicle==selectedVehicle">
+            <td>{{i+1}}</td>
+            <td>{{vehicle.vehicleID}}</td>
+            <td>{{vehicle.colour}}</td>
+            <td>{{vehicle.seatCount}}</td>
+            <td>{{vehicle.status}}</td>
+            <td>{{vehicle.available}}</td>
+            <td>{{vehicle.regNo}}</td>
+            <td>{{vehicle.district}}</td>
+            <td>{{vehicle.city}}</td>
+
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="9">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+        <div class="btn-div">
+          <button (click)="openModal(addvehicle)" class="fa fa-plus" class="btn btn-primary" >Add</button>
+          <button (click)="editVehicle()" class="fa fa-edit " class="btn btn-warning">Edit</button>
+          <button (click)="deleteVehicle()" class="fa fa-trash " class="btn btn-danger">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!--if item not found-->
+
+
+<ng-template #itemnotfound>
+  <div><h1>Vehicle Not Found !!!</h1></div>
+</ng-template>
+
+<!--ng modal start remove item-->
+<ng-template #addvehicle let-modal>
+  <div class="addcustomer-form">
+    <div class="modal-header">
+
+      <h4 class="modal-title text-center" >Add Vehicle</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    <form [formGroup]="vehicleForm">
+      <!--<div class="form-group">-->
+      <!--<label>Code</label>-->
+      <!--<input type="text" formControlName="itemCode" name="itemCode" [(ngModel)]="selectedItem.itemCode" id="itemCode" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.itemCode.errors }" />-->
+      <!--<div class="invalid-feedback">-->
+      <!--<div >code is required</div>-->
+
+      <!--</div>-->
+      <!--</div>-->
+      <div class="form-group">
+        <label>vehicle Id</label>
+        <input type="text" formControlName="vehicleID" name="vehicleID" [(ngModel)]="selectedVehicle.vehicleID" id="vehicleID" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.vehicleID.errors }" />
+        <div *ngIf="submitted && f.vehicleID.errors" class="invalid-feedback">
+          <div *ngIf="f.vehicleID.errors.required">Item Name is required</div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Colour</label>
+        <input type="text" formControlName="colour"   name="colour" [(ngModel)]="selectedVehicle.colour" id="type"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.colour.errors }" />
+        <div *ngIf="submitted && f.colour.errors" class="invalid-feedback">
+          <div *ngIf="f.colour.errors.required">Colour is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Seat Count</label>
+        <input type="text" formControlName="seatCount"   name="seatCount"
+               [(ngModel)]="selectedVehicle.seatCount" id="seatCount"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.seatCount.errors }" />
+        <div *ngIf="submitted && f.seatCount.errors" class="invalid-feedback">
+          <div *ngIf="f.seatCount.errors.required">Seat count is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <input type="text" formControlName="status"   name="status"
+               [(ngModel)]="selectedVehicle.status" id="status"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.status.errors }" />
+        <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+          <div *ngIf="f.status.errors.required">Status is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Colour</label>
+        <input type="text" formControlName="colour"   name="colour"
+               [(ngModel)]="selectedVehicle.colour" id="colour"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.colour.errors }" />
+        <div *ngIf="submitted && f.colour.errors" class="invalid-feedback">
+          <div *ngIf="f.colour.errors.required">Colour is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Availablity</label>
+        <input type="text" formControlName="available"   name="available"
+               [(ngModel)]="selectedVehicle.available" id="available"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.available.errors }" />
+        <div *ngIf="submitted && f.available.errors" class="invalid-feedback">
+          <div *ngIf="f.available.errors.required">Availability is required</div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label>Availablity</label>
+        <input type="text" formControlName="regNo"   name="regNo"
+               [(ngModel)]="selectedVehicle.regNo" id="regNo"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.regNo.errors }" />
+        <div *ngIf="submitted && f.regNo.errors" class="invalid-feedback">
+          <div *ngIf="f.regNo.errors.required">Reg No is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>District</label>
+        <input type="text" formControlName="district"   name="district"
+               [(ngModel)]="selectedVehicle.colour" id="district"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.district.errors }" />
+        <div *ngIf="submitted && f.district.errors" class="invalid-feedback">
+          <div *ngIf="f.district.errors.required">District is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>City</label>
+        <input type="text" formControlName="city"   name="city"
+               [(ngModel)]="selectedVehicle.city" id="city"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.city.errors }" />
+        <div *ngIf="submitted && f.city.errors" class="invalid-feedback">
+          <div *ngIf="f.city.errors.required">City is required</div>
+        </div>
+      </div>
+
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Close</button>
+      <button type="button" class="btn btn-info" (click)="saveVehicle()">Modify</button>
+    </div>
+  </div>
+</ng-template>
+<!--ng modal end-->
+
+<!--alert modal-->
+<ng-template #alert let-modal>
+  <div class="modal-header" >
+    <h4 class="modal-title" >Status: </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="alert alert-{{alertType}}">
+    <h5 class="text text-center ">{{alertMessage}}</h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary " (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--alert message- end-->

@@ -1,0 +1,202 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Manage Package</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Manage Package</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+
+<div  class="form-group" style="display:inline-flex;align-items: flex-start">
+  <label>Search By ID</label>
+  <input type="text"  name="searchId" [(ngModel)]="searchId" id="searchId" class="form-control"  />
+  <button  type="button" class="btn btn-info" ><i class="fa fa-search" style="float: right"></i></button>
+</div>
+
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-12">
+        <table id="tblSuppliers" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>P ID</th>
+            <th>Name</th>
+            <th>Distance</th>
+            <th>Days</th>
+            <th>Hours</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Min Advance</th>
+          </tr>
+          </thead>
+          <tbody>
+
+
+
+
+          <tr *ngFor="let package of packages | paginate: { itemsPerPage: 10, currentPage: p };let i=index"
+              (click)="selectPackage(package)" [class.selected]="package==selectedPackage">
+            <td>{{i+1}}</td>
+            <td>{{package.packageID}}</td>
+            <td>{{package.name}}</td>
+            <td>{{package.distance}}</td>
+            <td>{{package.days}}</td>
+            <td>{{package.hours}}</td>
+            <td>{{package.amount}}</td>
+            <td>{{package.status}}</td>
+            <td>{{package.minimumAdvanced}}</td>
+
+
+
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="9">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+        <div class="btn-div">
+          <button (click)="openModal(addpackage)" class="fa fa-plus" class="btn btn-primary" >Add</button>
+          <button (click)="editPackage()" class="fa fa-edit " class="btn btn-warning">Edit</button>
+          <button (click)="deletePackage()" class="fa fa-trash " class="btn btn-danger">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!--if item not found-->
+
+
+
+
+<!--ng modal start remove item-->
+<ng-template #addpackage let-modal>
+  <div class="addcustomer-form">
+    <div class="modal-header">
+
+      <h4 class="modal-title text-center" >Add Item</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    <form [formGroup]="packageForm">
+
+      <div class="form-group">
+        <label>PKG ID</label>
+        <input type="text" formControlName="packageID" name="packageID"
+               [(ngModel)]="selectedPackage.packageID" id="packageID" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.packageID.errors }" />
+        <div *ngIf="submitted && f.packageID.errors" class="invalid-feedback">
+          <div *ngIf="f.packageID.errors.required">Pkg Id is required</div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label> Name</label>
+        <input type="text" formControlName="name"   name="name" [(ngModel)]="selectedPackage.name"
+               id="name"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }" />
+        <div *ngIf="submitted && f.name.errors" class="invalid-feedback">
+          <div *ngIf="f.name.errors.required"> Name is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Distance</label>
+        <input type="text" formControlName="distance" name="distance" [(ngModel)]="selectedPackage.distance" id="distance" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.distance.errors }" />
+        <div *ngIf="submitted && f.distance.errors" class="invalid-feedback">
+          <div *ngIf="f.distance.errors.required">Distance is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Days</label>
+        <input type="text" formControlName="days" name="days" [(ngModel)]="selectedPackage.distance" id="days" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.days.errors }" />
+        <div *ngIf="submitted && f.days.errors" class="invalid-feedback">
+          <div *ngIf="f.days.errors.required">Days is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Hours</label>
+        <input type="text" formControlName="hours" name="hours" [(ngModel)]="selectedPackage.distance"
+               id="hours" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.hours.errors }" />
+        <div *ngIf="submitted && f.hours.errors" class="invalid-feedback">
+          <div *ngIf="f.hours.errors.required">Hours is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="text" formControlName="amount" name="amount" [(ngModel)]="selectedPackage.amount" id="amount" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.amount.errors }" />
+        <div *ngIf="submitted && f.amount.errors" class="invalid-feedback">
+          <div *ngIf="f.amount.errors.required">Amount is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <input type="text" formControlName="status" name="status" [(ngModel)]="selectedPackage.distance" id="status" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.status.errors }" />
+        <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+          <div *ngIf="f.status.errors.required">Status is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Min Advance</label>
+        <input type="text" formControlName="minimumAdvanced" name="minimumAdvanced" [(ngModel)]="selectedPackage.minimumAdvanced" id="minimumAdvanced" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.minimumAdvanced.errors }" />
+        <div *ngIf="submitted && f.minimumAdvanced.errors" class="invalid-feedback">
+          <div *ngIf="f.minimumAdvanced.errors.required">Min Advance is required</div>
+        </div>
+      </div>
+
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Close</button>
+      <button type="button" class="btn btn-info" (click)="savePackage()">Modify</button>
+    </div>
+  </div>
+</ng-template>
+<!--ng modal end-->
+
+<!--alert modal-->
+<ng-template #alert let-modal>
+  <div class="modal-header" >
+    <h4 class="modal-title" >Status: </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="alert alert-{{alertType}}">
+    <h5 class="text text-center ">{{alertMessage}}</h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary " (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--alert message- end-->

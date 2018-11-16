@@ -1,0 +1,171 @@
+
+
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Vehicle Type</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Vehicle Type</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+<!--search -->
+<div  class="form-group" style="display:inline-flex;align-items: flex-start">
+  <label>Search By ID</label>
+  <input type="text" name="searchId" [(ngModel)]="searchId" id="searchId" class="form-control"  />
+  <button  type="button" class="btn btn-info" (click)="findOrderById()"><i class="fa fa-search" style="float: right"></i></button>
+</div>
+
+
+<section class="content" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-12">
+        <table id="tblItem" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Order ID</th>
+            <th>Time</th>
+            <th>Order Date</th>
+            <th>Advance</th>
+            <th>Cust ID/th>
+
+
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr *ngFor="let order of orders | paginate: { itemsPerPage: 10, currentPage: p };let i=index"
+              (click)="selectOrder(order)" [class.selected]="order==selectedOrder">
+            <td>{{i+1}}</td>
+            <td>{{order.orderID}}</td>
+            <td>{{order.times}}</td>
+            <td>{{order.orderDate}}</td>
+            <td>{{order.advanced}}</td>
+
+
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="5">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+        <div class="btn-div">
+          <button routerLink="main/addorder" class="fa fa-plus" class="btn btn-primary" >Add</button>
+          <button (click)="editOrder()" class="fa fa-edit " class="btn btn-warning">Edit</button>
+          <button (click)="deleteOrder()" class="fa fa-trash " class="btn btn-danger">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!--if item not found-->
+
+
+
+
+<!--ng modal start remove item-->
+<ng-template #modifyorder let-modal>
+  <div class="addcustomer-form">
+    <div class="modal-header">
+
+      <h4 class="modal-title text-center" >Modify Order</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    <form [formGroup]="orderForm">
+
+      <div class="form-group">
+        <label>Order ID</label>
+        <input type="text" formControlName="orderID" name="orderID" [(ngModel)]="selectedOrder.orderID" id="orderID"
+               class="form-control" [ngClass]="{ 'is-invalid': submitted && f.orderID.errors }" />
+        <div *ngIf="submitted && f.orderID.errors" class="invalid-feedback">
+          <div *ngIf="f.orderID.errors.required">Id is required</div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Time</label>
+        <input type="text" formControlName="times"   name="times" [(ngModel)]="selectedOrder.times"
+               id="times"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.times.errors }" />
+        <div *ngIf="submitted && f.times.errors" class="invalid-feedback">
+          <div *ngIf="f.times.errors.required">Time is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Order Date</label>
+        <input type="text" formControlName="orderDate"   name="orderDate" [(ngModel)]="selectedOrder.orderDate" id="orderDate"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.typeName.errors }" />
+        <div *ngIf="submitted && f.orderDate.errors" class="invalid-feedback">
+          <div *ngIf="f.orderDate.errors.required">Date is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+
+        orderID:number;
+        times:string;
+        orderDate:string;
+        advanced:number;
+        customerID:Customer;
+        <label>Advance</label>
+        <input type="text" formControlName="advanced" name="advanced" [(ngModel)]="selectedOrder.advanced"
+               id="advanced" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.advanced.errors }" />
+        <div *ngIf="submitted && f.advanced.errors" class="invalid-feedback">
+          <div *ngIf="f.advanced.errors.required">Fuel Type is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Customer Id</label>
+        <input type="text" formControlName="customerID"   name="customerID" [(ngModel)]="selectedOrder.customerID.customerID"
+               id="customerID"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.customerID.errors }" />
+        <div *ngIf="submitted && f.customerID.errors" class="invalid-feedback">
+          <div *ngIf="f.customerID.errors.required">Customer Id is required</div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Close</button>
+      <button type="button" class="btn btn-info" (click)="updateOrder()">Modify</button>
+    </div>
+  </div>
+</ng-template>
+<!--ng modal end-->
+
+<!--alert modal-->
+<ng-template #alert let-modal>
+  <div class="modal-header" >
+    <h4 class="modal-title" >Status: </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="alert alert-{{alertType}}">
+    <h5 class="text text-center ">{{alertMessage}}</h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary " (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--alert message- end-->

@@ -1,0 +1,35 @@
+.profile-userpic img {
+  float: none;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-left: 30%;
+  margin-right: 50%;
+  width: 30%;
+  height: 30%;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  border-radius: 50% !important;
+}
+
+.profile-userpic-nav img {
+  /*float: right;*/
+  margin: 0 auto;
+  /*margin-top: 10px;*/
+  margin-left: 550px !important;
+  /*margin-right: -50px !important;*/
+
+  width: 5%;
+  height: 5%;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  border-radius: 50% !important;
+}
+
+.main-header{
+  /*background-color: #9CA0A2 !important;*/
+  background-color: #06394F !important;
+}
+aside{
+  /*background-color: #06394F;*/
+  background-color: #0F58B3;
+}

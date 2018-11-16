@@ -1,0 +1,286 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Manage Customer</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Manage Customer</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+
+<div  class="form-group" style="display:inline-flex;align-items: flex-start">
+  <label>Search By ID</label>
+  <input type="text"  name="searchId" [(ngModel)]="searchId" id="searchId" class="form-control"  />
+  <button  type="button" class="btn btn-info" (click)="findVehicleTypeById()"><i class="fa fa-search" style="float: right"></i></button>
+</div>
+
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-12">
+        <table id="tblSuppliers" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>NIC</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Tel No 1</th>
+            <th>Tel no 2</th>
+            <th>Rating</th>
+            <th>Gender</th>
+            <th>Status</th>
+          </tr>
+          </thead>
+          <tbody>
+
+
+          <tr *ngFor="let customer of customers | paginate: { itemsPerPage: 10, currentPage: p };let i=index"
+              (click)="selectCustomer(customer)" [class.selected]="customer==selectedcustomer">
+            <td>{{i+1}}</td>
+            <td>{{customer.customerID}}</td>
+            <td>{{customer.userName}}</td>
+            <td>{{customer.nic}}</td>
+            <td>{{customer.fristName}}</td>
+            <td>{{customer.lastName}}</td>
+            <td>{{customer.address}}</td>
+            <td>{{customer.telNo1}}</td>
+            <td>{{customer.telNo2}}</td>
+            <td>{{customer.rating}}</td>
+            <td>{{customer.gender}}</td>
+            <td>{{customer.driverID}}</td>
+            <td>{{customer.status}}</td>
+
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="11">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+        <div class="btn-div">
+          <!--<button (click)="openModal(addcustomer)" class="fa fa-plus" class="btn btn-primary" >Add</button>-->
+          <button (click)="editcustomer()" class="fa fa-edit " class="btn btn-warning">Edit</button>
+          <button (click)="deleteCustomer()" class="fa fa-trash " class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+
+<!--ng modal start remove item-->
+<ng-template #addcustomer let-modal>
+  <div class="addcustomer-form">
+    <div class="modal-header">
+
+      <h4 class="modal-title text-center" >Modify Customer</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    <form [formGroup]="customerForm">
+      <div class="form-group">
+        <label>Customer Id</label>
+        <input type="text" formControlName="customerID" class="form-control" [(ngModel)]="selectedcustomer.customerID" id="customerID" name="customerID" [ngClass]="{ 'is-invalid': submitted && f.customerID.errors }" />
+        <div *ngIf="submitted && f.customerID.errors" class="invalid-feedback">
+          <div *ngIf="f.customerID.errors.required">Id is required</div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label>User Name</label>
+        <input type="text" formControlName="lastName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.userName.errors }"
+               [(ngModel)]="selectedcustomer.userName" id="userName" name="userName"/>
+        <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">
+          <div *ngIf="f.userName.errors.required">User Name is required</div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label>NIC </label>
+        <input type="text" formControlName="nic" class="form-control"
+               [(ngModel)]="selectedcustomer.nic" id="nic" name="nic" [ngClass]="{ 'is-invalid': submitted && f.nic.errors }" />
+        <div *ngIf="submitted && f.nic.errors" class="invalid-feedback">
+          <div *ngIf="f.nic.errors.required">NIC  required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" formControlName="fristName" class="form-control"
+               [(ngModel)]="selectedcustomer.fristName" id="fristName" name="fristName" [ngClass]="{ 'is-invalid': submitted && f.fristName.errors }" />
+        <div *ngIf="submitted && f.fristName.errors" class="invalid-feedback">
+          <div *ngIf="f.fristName.errors.required">First Name is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" formControlName="lastName" class="form-control"
+               [(ngModel)]="selectedcustomer.lastName" id="lastName" name="lastName" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
+        <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
+          <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Address</label>
+        <input type="text" formControlName="address" class="form-control"
+               [(ngModel)]="selectedcustomer.address" id="address" name="address" [ngClass]="{ 'is-invalid': submitted && f.address.errors }" />
+        <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
+          <div *ngIf="f.address.errors.required">Address is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tel No 1</label>
+        <input type="text" formControlName="telNo1" class="form-control"
+               [(ngModel)]="selectedcustomer.telNo1" id="telNo1" name="telNo1" [ngClass]="{ 'is-invalid': submitted && f.telNo1.errors }" />
+        <div *ngIf="submitted && f.telNo1.errors" class="invalid-feedback">
+          <div *ngIf="f.telNo1.errors.required">Tel No 1 is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Tel No 2</label>
+        <input type="text" formControlName="telNo1" class="form-control"
+               [(ngModel)]="selectedcustomer.telNo2" id="telNo2" name="telNo2" [ngClass]="{ 'is-invalid': submitted && f.telNo2.errors }" />
+        <div *ngIf="submitted && f.telNo2.errors" class="invalid-feedback">
+          <div *ngIf="f.telNo2.errors.required">Tel No 2 is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Rating</label>
+        <input type="text" formControlName="rating" class="form-control"
+               [(ngModel)]="selectedcustomer.userName" id="rating" name="rating" [ngClass]="{ 'is-invalid': submitted && f.rating.errors }" />
+        <div *ngIf="submitted && f.rating.errors" class="invalid-feedback">
+          <div *ngIf="f.rating.errors.required">Rating is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Status</label>
+        <input type="text" formControlName="telNo1" class="form-control"
+               [(ngModel)]="selectedcustomer.status" id="status" name="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }" />
+        <div *ngIf="submitted && f.status.errors" class="invalid-feedback">
+          <div *ngIf="f.status.errors.required">Tel No 2 is required</div>
+        </div>
+      </div>
+
+      <!--<div class="form-group">-->
+        <!--<label>Status</label>-->
+        <!--<input type="text" formControlName="status" class="form-control"  -->
+               <!--[(ngModel)]="selectedcustomer.status" id="status" name="status" [ngClass]="{ 'is-invalid': submitted && f.status.errors }" />-->
+        <!--<div *ngIf="submitted && f.status.errors" class="invalid-feedback">-->
+          <!--<div *ngIf="f.status.errors.required">Status is required</div>-->
+        <!--</div>-->
+      <!--</div>-->
+
+      <select formControlName="gender" class="form-control" [value]='gender'>
+        <option> Male</option>
+        <option> FeMale</option>
+      </select>
+
+
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" formControlName="password" class="form-control"  [(ngModel)]="selectedcustomer.password" id="password" name="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+          <div *ngIf="f.password.errors.required">Password is required</div>
+          <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Register</button>
+      </div>
+    </form>
+
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Close</button>
+      <button type="button" class="btn btn-info" (click)="modify()">Modify</button>
+    </div>
+  </div>
+</ng-template>
+
+<!--ng modal end-->
+
+<!--unsucces modal-->
+<ng-template #unsuccess let-modal>
+  <div class="modal-header" style="background-color: darkorange">
+    <h4 class="modal-title" >Status </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <p>
+      <span class="text-danger">Not Saved !!!</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary btn-block btn-flat" (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--unsuccess message- end-->
+
+<!--succes modal-->
+<ng-template #success let-modal>
+  <div class="modal-header" style="color:darkseagreen">
+    <h4 class="modal-title" >Status </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!--<p><strong>Are you sure you want to delete <span class="text-primary">{{productDesc}}</span> Product ?</strong></p>-->
+    <p>
+      <span class="text-bold">Successfully saved..</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary btn-block btn-flat" (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--success message- end-->
+
+<!--alert modal-->
+<ng-template #alert let-modal>
+  <div class="modal-header" >
+    <h4 class="modal-title" >Status </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <p>
+      <span class="text-danger">Please select the Driver !!</span>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary btn-block btn-flat" (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--alert message- end-->

@@ -1,0 +1,158 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Extra Mile charge</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Extra Mile Charge</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Main content -->
+
+<!--search -->
+<div  class="form-group" style="display:inline-flex;align-items: flex-start">
+  <label>Search By ID</label>
+  <input type="text" name="searchId" [(ngModel)]="searchId" id="searchId" class="form-control"  />
+  <button  type="button" class="btn btn-info" (click)="findExtraMilechargeById()"><i class="fa fa-search" style="float: right"></i></button>
+</div>
+
+
+<section class="content" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12 col-12">
+        <table id="tblItem" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Extra Mile Charge ID</th>
+            <th>Mailage</th>
+            <th>Price</th>
+            <th>VehicleType Id</th>
+
+
+
+          </tr>
+          </thead>
+          <tbody>
+
+          <tr *ngFor="let extramilecharge of extra_milecharges | paginate: { itemsPerPage: 10, currentPage: p };let i=index"
+              (click)="selectExtraMilecharges(extramilecharge)" [class.selected]="extramilecharge==selectedextramilecharge">
+            <td>{{i+1}}</td>
+            <td>{{extramilecharge.extraMileageChargeID}}</td>
+            <td>{{extramilecharge.mileage}}</td>
+            <td>{{extramilecharge.price}}</td>
+            <td>{{extramilecharge.vehicleTypeID.vehicleTypeID</td>
+
+
+          </tr>
+          </tbody>
+          <tfoot>
+          <tr>
+            <td colspan="5">
+              <pagination-controls (pageChange)="p = $event"></pagination-controls>
+            </td>
+          </tr>
+          </tfoot>
+        </table>
+        <div class="btn-div">
+          <button (click)="openModal(extramilecharges)" class="fa fa-plus" class="btn btn-primary" >Add</button>
+          <button (click)="editExtraMilecharges()" class="fa fa-edit " class="btn btn-warning">Edit</button>
+          <button (click)="deleteextraMilecharges()" class="fa fa-trash " class="btn btn-danger">Delete</button>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+
+<!--if item not found-->
+
+
+
+
+<!--ng modal start remove item-->
+<ng-template #extramilecharges let-modal>
+  <div class="addcustomer-form">
+    <div class="modal-header">
+
+      <h4 class="modal-title text-center" >Add Extra Mile Charge</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div>
+
+    <form [formGroup]="extramilechargeForm">
+
+      <div class="form-group">
+        <label>Extra Day Charges</label>
+        <input type="text" formControlName="extraMileageChargeID" name="extraMileageChargeID"
+               [(ngModel)]="selectedextramilecharge.extraMileageChargeID" id="extraMileageChargeID" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.extraMileageChargeID.errors }" />
+        <div *ngIf="submitted && f.extraMileageChargeID.errors" class="invalid-feedback">
+          <div *ngIf="f.extraMileageChargeID.errors.required">Id is required</div>
+
+        </div>
+      </div>
+      <div class="form-group">
+        <label> Maileage</label>
+        <input type="text" formControlName="mileage"   name="mileage" [(ngModel)]="selectedextramilecharge.mileage"
+               id="dayCount"   class="form-control" [ngClass]="{ 'is-invalid': submitted && f.dayCount.errors }" />
+        <div *ngIf="submitted && f.dayCount.errors" class="invalid-feedback">
+          <div *ngIf="f.dayCount.errors.required">Day Count is required</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Price</label>
+        <input type="text" formControlName="price"   name="price" [(ngModel)]="selectedextramilecharge.price" id="price"
+               class="form-control" [ngClass]="{ 'is-invalid': submitted && f.price.errors }" />
+        <div *ngIf="submitted && f.price.errors" class="invalid-feedback">
+          <div *ngIf="f.price.errors.required">Price is required</div>
+        </div>
+      </div>
+
+
+
+      <div class="form-group">
+        <label>Vehicle Type Id</label>
+        <input type="text" formControlName="vehicleTypeID" name="vehicleTypeID" [(ngModel)]="selectedextramilecharge.vehicleTypeID.vehicleTypeID" id="vehicleTypeID" class="form-control"
+               [ngClass]="{ 'is-invalid': submitted && f.vehicleTypeID.errors }" />
+        <div *ngIf="submitted && f.vehicleTypeID.errors" class="invalid-feedback">
+          <div *ngIf="f.vehicleTypeID.errors.required">Vehicle Type Id is required</div>
+        </div>
+      </div>
+    </form>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Close</button>
+      <button type="button" class="btn btn-info" (click)="saveExtradaycharge()">Modify</button>
+    </div>
+  </div>
+</ng-template>
+<!--ng modal end-->
+
+<!--alert modal-->
+<ng-template #alert let-modal>
+  <div class="modal-header" >
+    <h4 class="modal-title" >Status: </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="alert alert-{{alertType}}">
+    <h5 class="text text-center ">{{alertMessage}}</h5>
+  </div>
+  <div class="modal-footer">
+    <button type="button"  class="btn btn-primary " (click)="modal.close('Ok click')">Continue</button>
+  </div>
+</ng-template>
+<!--alert message- end-->
