@@ -1,0 +1,8 @@
+#
+#Mon Jul 16 23:21:14 IST 2018
+lk.ijse.spring.rest.controller.UserController=org.springframework.stereotype.Component
+lk.ijse.spring.rest.controller.CustomerController=org.springframework.stereotype.Component
+lk.ijse.spring.rest.service.impl.UserServiceImpl=org.springframework.stereotype.Component
+lk.ijse.spring.rest.service.impl.CustomerServiceImpl=org.springframework.stereotype.Component
+lk.ijse.spring.rest.main.WebRootConfig=org.springframework.stereotype.Component
+lk.ijse.spring.rest.main.WebAppConfig=org.springframework.stereotype.Component
